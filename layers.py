@@ -80,10 +80,10 @@ class Decoder(nn.Module):
         self.vl = nn.Parameter(torch.randn(self.dh))
         self.vf = nn.Parameter(torch.randn(self.dh))
 
-        self.dense_q_d = nn.ModuleList([nn.Linear(3 * self.dh, self.dk, bias=False) for _ in range(self.M)])
-        self.dense_v_d = nn.ModuleList([nn.Linear(self.dh, self.dv, bias=False) for _ in range(self.M)])
-        self.dense_k_d = nn.ModuleList([nn.Linear(self.dh, self.dk, bias=False) for _ in range(self.M)])
-        self.dense_o_d = nn.ModuleList([nn.Linear(self.dv, 3 * self.dh, bias=False) for _ in range(self.M)])
+        self.dense_q = nn.ModuleList([nn.Linear(3 * self.dh, self.dk, bias=False) for _ in range(self.M)])
+        self.dense_v = nn.ModuleList([nn.Linear(self.dh, self.dv, bias=False) for _ in range(self.M)])
+        self.dense_k = nn.ModuleList([nn.Linear(self.dh, self.dk, bias=False) for _ in range(self.M)])
+        self.dense_o = nn.ModuleList([nn.Linear(self.dv, 3 * self.dh, bias=False) for _ in range(self.M)])
 
         self.dense_q_a = nn.Linear(3 * self.dh, self.dk, bias=False)
         self.dense_k_a = nn.Linear(self.dh, self.dk, bias=False)
@@ -133,9 +133,9 @@ class Decoder(nn.Module):
         h = 0
 
         for m in range(self.M):
-            q = self.dense_q_d[m](x1)
-            v = self.dense_v_d[m](x2)
-            k = self.dense_k_d[m](x2)
+            q = self.dense_q[m](x1)
+            v = self.dense_v[m](x2)
+            k = self.dense_k[m](x2)
             k_t = torch.transpose(k, 1, 2)
             u = torch.bmm(q, k_t) / math.sqrt(self.dk) - mask
             s = self.softmax(u)

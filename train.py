@@ -9,7 +9,7 @@ from tsp import generate_instances, evaluate, plot
 
 # model = AttentionModel(2, 5, 5, 3, 3)
 base_model = AttentionModel(2,16,32,3,3)
-model = AttentionModel(2,16,32,3,3)
+model = AttentionModel(2,16,32,3,3,100)
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 problem = generate_instances(10, 2)
