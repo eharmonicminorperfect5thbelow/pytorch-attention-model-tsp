@@ -136,14 +136,13 @@ class Decoder(nn.Module):
 
     def multi_head_attention(self, x1, x2, mask):
         h = 0
-        mask = try_gpu(mask)
 
         for m in range(self.M):
             q = self.dense_q[m](x1)
             v = self.dense_v[m](x2)
             k = self.dense_k[m](x2)
             k_t = torch.transpose(k, 1, 2)
-            u = torch.bmm(q, k_t) / math.sqrt(self.dk) - mask
+            u = torch.bmm(q, k_t) / math.sqrt(self.dk)
             s = self.softmax(u)
             t = torch.bmm(s, v)
             h += self.dense_o[m](t)
