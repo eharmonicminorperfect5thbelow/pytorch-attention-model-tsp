@@ -96,9 +96,9 @@ class Decoder(nn.Module):
         self.softmax = nn.Softmax(2)
 
     def forward(self, x, decode):
-        log_p = torch.zeros(x.size()[0], 1)
+        log_p = try_gpu(torch.zeros(x.size()[0], 1))
         mask = try_gpu(torch.zeros(x.size()[0], 1, x.size()[1]))
-        selected = torch.zeros(x.size()[0], 0).type(torch.int64)
+        selected = try_gpu(torch.zeros(x.size()[0], 0).type(torch.int64))
         
         m = x.sum(1) / x.size()[1]
         m = m.view(m.size()[0], 1, m.size()[1])
