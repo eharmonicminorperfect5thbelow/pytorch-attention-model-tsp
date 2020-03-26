@@ -136,6 +136,7 @@ class Decoder(nn.Module):
 
     def multi_head_attention(self, x1, x2, mask):
         h = 0
+        mask = try_gpu(mask)
 
         for m in range(self.M):
             q = self.dense_q[m](x1)
