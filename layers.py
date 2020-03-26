@@ -125,8 +125,8 @@ class Decoder(nn.Module):
             vf_numpy = np.zeros(m.size())
             
             for j in range(len(indices)):
-                vl_numpy[j] = x[j][selected[j][-1]].detach().numpy()
-                vf_numpy[j] = x[j][selected[j][0]].detach().numpy()
+                vl_numpy[j] = x[j][selected[j][-1]].detach().cpu().numpy()
+                vf_numpy[j] = x[j][selected[j][0]].detach().cpu().numpy()
                 mask[j][0][indices[j][0]] = float('Inf')
             
             vl = torch.from_numpy(vl_numpy).type(torch.float32)
