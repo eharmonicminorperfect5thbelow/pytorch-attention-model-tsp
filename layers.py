@@ -5,6 +5,11 @@ import math
 import numpy as np
 
 
+def try_gpu(e):
+    if torch.cuda.is_available():
+        return e.cuda()
+    return e
+
 class Encoder(nn.Module):
     def __init__(self, dx=2, dh=128, dff=512, N=3, M=8):
         super(Encoder, self).__init__()
@@ -34,7 +39,7 @@ class Encoder(nn.Module):
 
     def forward(self, x):
         h = self.dense_h(x)
-        self.bn = nn.BatchNorm1d(x.size()[1], affine=False)
+        self.bn = tru_gpu(nn.BatchNorm1d(x.size()[1], affine=False))
 
         for n in range(self.N):
             h_mha = self.multi_head_attention(h, n)
