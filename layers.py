@@ -97,7 +97,7 @@ class Decoder(nn.Module):
 
     def forward(self, x, decode):
         log_p = torch.zeros(x.size()[0], 1)
-        mask = torch.zeros(x.size()[0], 1, x.size()[1])
+        mask = try_gpu(torch.zeros(x.size()[0], 1, x.size()[1]))
         selected = torch.zeros(x.size()[0], 0).type(torch.int64)
         
         m = x.sum(1) / x.size()[1]
@@ -142,7 +142,7 @@ class Decoder(nn.Module):
             v = self.dense_v[m](x2)
             k = self.dense_k[m](x2)
             k_t = torch.transpose(k, 1, 2)
-            u = torch.bmm(q, k_t) / math.sqrt(self.dk)
+            u = torch.bmm(q, k_t) / math.sqrt(self.dk) - mask
             s = self.softmax(u)
             t = torch.bmm(s, v)
             h += self.dense_o[m](t)
