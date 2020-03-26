@@ -129,8 +129,8 @@ class Decoder(nn.Module):
                 vf_numpy[j] = x[j][selected[j][0]].detach().cpu().numpy()
                 mask[j][0][indices[j][0]] = float('Inf')
             
-            vl = torch.from_numpy(vl_numpy).type(torch.float32)
-            vf = torch.from_numpy(vf_numpy).type(torch.float32)
+            vl = try_gpu(torch.from_numpy(vl_numpy).type(torch.float32))
+            vf = try_gpu(torch.from_numpy(vf_numpy).type(torch.float32))
 
         return selected, log_p.squeeze()
 
