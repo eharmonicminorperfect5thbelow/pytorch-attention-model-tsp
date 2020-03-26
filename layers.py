@@ -39,7 +39,7 @@ class Encoder(nn.Module):
 
     def forward(self, x):
         h = self.dense_h(x)
-        self.bn = tru_gpu(nn.BatchNorm1d(x.size()[1], affine=False))
+        self.bn = try_gpu(nn.BatchNorm1d(x.size()[1], affine=False))
 
         for n in range(self.N):
             h_mha = self.multi_head_attention(h, n)
